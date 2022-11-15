@@ -9,10 +9,12 @@ create_folder = input("Give me the folder you wanna create: ")
 res_folder = input("Choose folder to copy: ")
 video_option = input("Do you want video record (y/n): ").lower()
 
+check_video = True if video_option == "e" else False
+
 print("Input can't be empty") if create_folder == "\n" or create_folder == " " \
     else print("Starting Process for cPanel")
 
 options = ["cPanel", "CWP", "Plesk"]
 
 with sync_playwright() as p:
-    cp_run(p, create_folder, res_folder)
+    cp_run(p, create_folder, res_folder, check_video)

@@ -9,7 +9,7 @@ create_folder = input("Give me the folder you wanna create: ")
 res_folder = input("Choose folder to copy: ")
 video_option = input("Do you want video record (y/n): ").lower()
 
-check_video = True if video_option == "e" else False
+check_video = True if video_option == "y" else False
 
 print("Input can't be empty") if create_folder == "\n" or create_folder == " " \
     else print("Starting Process for cPanel")

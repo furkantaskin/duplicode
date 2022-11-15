@@ -3,13 +3,16 @@ Get input from user to copy webpage
 """
 
 from playwright.sync_api import Playwright, sync_playwright
-from main import run
+from main import cp_run
 
-create_folder = "demo"
-# create_folder = input("Give me the folder you wanna create: ")
+create_folder = input("Give me the folder you wanna create: ")
+res_folder = input("Choose folder to copy: ")
+video_option = input("Do you want video record (y/n): ").lower()
 
 print("Input can't be empty") if create_folder == "\n" or create_folder == " " \
-    else print("Creating folder")
+    else print("Starting Process for cPanel")
+
+options = ["cPanel", "CWP", "Plesk"]
 
 with sync_playwright() as p:
-    run(p)
+    cp_run(p, create_folder, res_folder)

@@ -1,12 +1,26 @@
-from playwright.sync_api import Playwright, expect
+"""
+Aim of this part is to copy source template and generate new project through cPanel file manager.
+
+- Log in to the cPanel
+- Go to the file manager
+- Create zip from template (it can vary per project)
+- Create destination folder or new project in file manager
+- Move the zip file and extract it
+- Delete the zip file after extraction
+
+==== WARNING ====
+It is currently using cPanel for my personal purposes. It may vary from team to team or company to company.
+Check selectors with text arguments. Because cPanel is using mixed language in their file manager, creating JSON for
+selector texts will be a difficult challenge.
+
+Author: Furkan Taşkın (muffinisamuffin)
+"""
+from playwright.sync_api import Playwright
 from decouple import config
 import re
-import time
 
 
-def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
-    get_id = time.time()
-    print("Current process id is", int(get_id))
+def cp_run(playwright: Playwright, dest_folder, source_folder, is_video, use_id):
 
     # Runs playwright and logins to whm panel
     browser = playwright.chromium.launch(channel="chrome", slow_mo=1000, headless=True)
@@ -15,7 +29,7 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     context = browser.new_context(no_viewport=True,
                                   viewport={"width": 1800, "height": 900},
                                   record_video_size={"width": 1800, "height": 900},
-                                  record_video_dir=f"videos/{int(get_id)}" if is_video else None)
+                                  record_video_dir=f"videos/{int(use_id)}" if is_video else None)
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
 
@@ -80,7 +94,7 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     page1.get_by_role("link", name=re.compile("Sil")).click()
     page1.get_by_label("Dosyaları çöp kutusuna atmadan kalıcı olarak silin").check()
     page1.get_by_role("button", name="Confirm").click()
-    context.tracing.stop(path=f"traces/trace_{int(get_id)}.zip")
+    context.tracing.stop(path=f"../traces/trace_{int(use_id)}.zip")
     print("Shutting Down")
     context.close()
     browser.close()

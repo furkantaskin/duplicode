@@ -15,7 +15,6 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
 
     print("Logging into cPanel")
     page.goto(config('GOLINK'))
-    expect(page).to_have_title("cPanel Login")
     page.locator("input#user").fill(config('USERNAME'))
     page.locator("input#pass").fill(config('USERPASS'))
     page.locator("button[name='login']").click()
@@ -35,7 +34,7 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     page1.wait_for_timeout(600)
 
     # Create zip from source folder
-    print("Kaynak klasör sıkıştırılıyor")
+    print("Compressing source file")
     page1.locator("input#location").fill(f"public_html/demo/{source_folder}")
     page1.locator("button#btnGo").click()
     page.wait_for_timeout(500)
@@ -49,7 +48,7 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     page1.get_by_role("link", name=" Yeniden yükle").click()
     page1.get_by_role("cell", name="transfer.zip").locator("div:has-text(\"transfer.zip\")").click()
     page1.wait_for_timeout(500)
-    print("Dosyalar taşınyor")
+    print("Moving files")
     page1.get_by_role("link", name=re.compile("Taşı")).click()
     page1.get_by_label("Geçerli Yol:").fill(f"/public_html/demo/{dest_folder}/")
     page1.keyboard.press("Enter")
@@ -61,14 +60,14 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     page1.locator(".yui-dt-rec:has-text(\"transfer.zip\")").click()
     page1.wait_for_timeout(500)
     page1.locator(".yui-dt-rec:has-text(\"transfer.zip\")").click(button="right")
-    print("Dosya çıkarılıyor")
+    print("Extracting zip file")
     page1.get_by_role("link", name=re.compile("Çıkar")).click()
     page1.get_by_role("button", name="Extract Files").click()
     page1.get_by_role("button", name="Close").click()
     page1.get_by_role("link", name=" Yeniden yükle").click()
 
     # Delete the zip file
-    print("Gereksiz dosyalar siliniyor")
+    print("Removing unused files")
     page1.locator(".yui-dt-rec:has-text(\"transfer.zip\")").click()
     page1.wait_for_timeout(500)
     page1.locator(".yui-dt-rec:has-text(\"transfer.zip\")").click(button="right")

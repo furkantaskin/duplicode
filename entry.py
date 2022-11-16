@@ -11,8 +11,7 @@ video_option = input("Do you want video record (y/n): ").lower()
 
 check_video = True if video_option == "y" else False
 
-print("Input can't be empty") if create_folder == "\n" or create_folder == " " \
-    else print("Starting Process for cPanel")
+print("Input can't be empty") if create_folder in ["\n", " "] else print("Starting Process for cPanel")
 
 options = ["cPanel", "CWP", "Plesk"]
 

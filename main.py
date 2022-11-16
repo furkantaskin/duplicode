@@ -7,8 +7,10 @@ import time
 def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     get_id = time.time()
     print("Current process id is", int(get_id))
+
     # Runs playwright and logins to whm panel
     browser = playwright.chromium.launch(channel="chrome", slow_mo=1000, headless=True)
+
     # Choose video directory if user wants video
     context = browser.new_context(no_viewport=True, record_video_size={"width": 1800, "height": 900},
                                   record_video_dir=f"videos/{int(get_id)}" if is_video else None)

@@ -6,11 +6,12 @@ import time
 
 def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     get_id = time.time()
-    print("Current process id is", get_id)
+    print("Current process id is", int(get_id))
     # Runs playwright and logins to whm panel
     browser = playwright.chromium.launch(channel="chrome", slow_mo=1000, headless=True)
     # Choose video directory if user wants video
-    context = browser.new_context(no_viewport=True, record_video_dir=f"videos/{int(get_id)}" if is_video else None)
+    context = browser.new_context(no_viewport=True, record_video_size={"width": 1800, "height": 900},
+                                  record_video_dir=f"videos/{int(get_id)}" if is_video else None)
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
 
@@ -44,7 +45,7 @@ def cp_run(playwright: Playwright, dest_folder, source_folder, is_video):
     page1.get_by_role("radio", name=re.compile("Zip Arşivi")).click()
     page1.locator("input[name='compressfilepath']").fill(f"/public_html/demo/{source_folder}/transfer.zip")
     page1.get_by_role("button", name="Compress Files").click()
-    page.wait_for_timeout(5000)
+    page.wait_for_timeout(30000)
     page1.get_by_role("button", name="Close").click()
     page1.get_by_role("link", name=" Yeniden yükle").click()
     page1.get_by_role("cell", name="transfer.zip").locator("div:has-text(\"transfer.zip\")").click()
